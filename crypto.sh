@@ -48,26 +48,48 @@ generate_keypair() {
     openssl req -nodes -x509 -sha256 -newkey rsa:4096 -keyout "key.pem" -out "cert.pem" -days 365
 }
 
+encrypt_text_file() {
+    echo -n "Enter name of file to encrypt: "
+    read file_in
+    echo -n "Enter output file name: "
+    read file_out
+    openssl aes-256-cbc -a -salt -in $file_in -out $file_out
+}
+
+decrypt_text_file() {
+    echo -n "Enter name of file to decrypt: "
+    read file_in
+    echo -n "Enter output file name: "
+    read file_out
+    openssl aes-256-cbc -d -a -in $file_in -out $file_out
+}
+
 echo "[1] generate key pair"
-echo "[2] sign file"
-echo "[3] verify signature"
-echo "[4] convert signature to base64"
-echo "[5] convert signature from base64"
-echo "[6] quit"
+echo "[2] encrypt text file"
+echo "[3] decrypt text file"
+echo "[4] sign file"
+echo "[5] verify signature"
+echo "[6] convert signature to base64"
+echo "[7] convert signature from base64"
+echo "[8] quit"
 echo -n "make a selection: "
 read choice
 
 if [ $choice -eq 1 ]; then
     generate_keypair
 elif [ $choice -eq 2 ]; then
-    sign_file
+    encrypt_text_file
 elif [ $choice -eq 3 ]; then
-    verify_signature
+    decrypt_text_file
 elif [ $choice -eq 4 ]; then
-    convert_signature_to_base64
+    sign_file
 elif [ $choice -eq 5 ]; then
-    convert_signature_from_base64
+    verify_signature
 elif [ $choice -eq 6 ]; then
+    convert_signature_to_base64
+elif [ $choice -eq 7 ]; then
+    convert_signature_from_base64
+elif [ $choice -eq 8 ]; then
     exit 0
 else
     echo "invalid selection"
