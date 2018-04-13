@@ -1,0 +1,1 @@
+function print2s { enscript -2r --pretty-print -p- $1 | lp -o sides=two-sided-long-edge; }
